@@ -1,8 +1,16 @@
 {
   "name": "formbloc",
-  "displayName": "formBloc",
-  "description": "",
+  "displayName": "formbloc",
+  "description": "Boilerplate code generation for blocs that handle forms.",
   "version": "1.0.0",
+  "publisher": "JulienCaselmann",
+  "bugs": {
+    "email": "julien4445@t-online.de"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/julienandco/formbloc_vs_code"
+  },
   "engines": {
     "vscode": "^1.69.0"
   },
