@@ -1,0 +1,71 @@
+{
+  "name": "formbloc",
+  "displayName": "formBloc",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.69.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:formbloc.new-form-bloc"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": [
+      {
+        "title": "FormBloc",
+        "properties": {
+          "formbloc.newFormBlocTemplate.createDirectory": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to create a bloc directory when creating a new form bloc."
+          }
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "formbloc.new-form-bloc",
+        "title": "FormBloc: new FormBloc"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/change-case": "^2.3.1",
+    "@types/glob": "^7.2.0",
+    "@types/js-yaml": "^3.12.1",
+    "@types/lodash": "^4.14.121",
+    "@types/mkdirp": "^0.5.2",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/node-fetch": "^2.0.0",
+    "@types/semver": "^6.0.2",
+    "@types/vscode": "^1.69.0",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "@vscode/test-electron": "^2.1.5",
+    "eslint": "^8.20.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "change-case": "^4.1.2",
+    "js-yaml": "^3.13.1",
+    "lodash": "^4.17.19",
+    "mkdirp": "^0.5.1",
+    "node-fetch": "^2.0.0",
+    "semver": "^6.3.0"
+  }
+}
