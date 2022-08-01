@@ -15,8 +15,16 @@
     "vscode": "^1.69.0"
   },
   "categories": [
-    "Other"
+    "Programming Languages"
   ],
+  "keywords": [
+    "dart",
+    "flutter",
+    "angulardart",
+    "bloc",
+    "state-management"
+  ],
+  "icon": "assets/logo.png",
   "activationEvents": [
     "onCommand:formbloc.new-form-bloc"
   ],
