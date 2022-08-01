@@ -78,10 +78,5 @@ function getFieldsString(fields: Array<FormBlocField>): string {
 }
 
 function getPropsString(fields: Array<FormBlocField>): string {
-  let submitString = '';
-  if (fields.length > 0) {
-    submitString = ', isSubmitting';
-  } else { submitString = 'isSubmitting'; }
-
-  return `[${fields.map((field) => field.name).join(", ")}${submitString}]`;
+  return `[${fields.map((field) => field.name).join(", ")}${fields.length > 0 ? ", " : ""}isSubmitting]`;
 }

@@ -47,7 +47,7 @@ function getFreezedFormBlocEvent(blocName: string, fields: Array<FormBlocField>)
 
 @freezed
 class ${pascalCaseBlocName} with _\$${pascalCaseBlocName} {
-  ${fields.map((field) => `const factory ${pascalCaseBlocName}.${buildEventFactoryForField(field)}`).join('\n')}
+  ${fields.map((field) => `const factory ${pascalCaseBlocName}.${buildEventFactoryForField(field)}`).join('\n\t')}
   const factory ${pascalCaseBlocName}.submit({void Function()? onFailure, void Function()? onSuccess,}) = _Submit${pascalCaseBlocNameNoEvent};
 }`;
 }
@@ -56,7 +56,16 @@ function buildEventFactoryForField(field: FormBlocField): string {
   let pascalCaseFieldName = changeCase.pascalCase(field.name);
   let isBool = field.submitType === 'bool';
   if (isBool) {
-    return `toggle${pascalCaseFieldName}() = _Toggle${pascalCaseFieldName}`;
+    return `${buildEventNameForField(field, false)}() = _${buildEventNameForField(field, true)}`;
   } else { 
-    return `change${pascalCaseFieldName}({${field.submitType.slice(-1) === "?" ? "" : "required"} ${field.submitType} new${pascalCaseFieldName}}) = _Change${pascalCaseFieldName}`; }
+    return `${buildEventNameForField(field, false)}({${field.submitType.slice(-1) === "?" ? "" : "required"} ${field.submitType} new${pascalCaseFieldName}}) = _${buildEventNameForField(field, true)}`; }
+}
+
+export function buildEventNameForField(field: FormBlocField, capitalize: boolean): string {
+  let pascalCaseFieldName = changeCase.pascalCase(field.name);
+  let isBool = field.submitType === 'bool';
+  if (isBool) {
+    return `${capitalize ? "T" : "t"}oggle${pascalCaseFieldName}`;
+  } else { 
+    return `${capitalize ? "C" : "c"}hange${pascalCaseFieldName}`; }
 }

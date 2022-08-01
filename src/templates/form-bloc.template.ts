@@ -1,6 +1,7 @@
 import * as changeCase from "change-case";
 import { BlocType } from "../utils";
 import { FormBlocField } from "../form-bloc-field";
+import { buildEventNameForField } from "./form-bloc-event.template";
 
 
 export function getFormBlocTemplate(blocName: string, type: BlocType, fields: Array<FormBlocField>): string {
@@ -59,7 +60,7 @@ class ${pascalCaseBlocName}Bloc extends Bloc<${blocEvent}, ${blocState}> {
 }
 
 //TODO
-export function getFreezedFormBlocTemplate(blocName: string, fields: Array<FormBlocField>) {
+function getFreezedFormBlocTemplate(blocName: string, fields: Array<FormBlocField>) {
   const pascalCaseBlocName = changeCase.pascalCase(blocName);
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
   const blocState = `${pascalCaseBlocName}State`;
@@ -72,11 +73,28 @@ part '${snakeCaseBlocName}_state.dart';
 part '${snakeCaseBlocName}_bloc.freezed.dart';
 
 class ${pascalCaseBlocName}Bloc extends Bloc<${blocEvent}, ${blocState}> {
-  ${pascalCaseBlocName}Bloc() : super(_Initial()) {
-    on<${blocEvent}>((event, emit) {
-      // TODO: implement event handler
-    });
+  ${pascalCaseBlocName}Bloc() : super(const _${pascalCaseBlocName}Editing(//TODO: fill)) {
+    ${fields.map(buildEventHandlerDeclarationForField).join('\n\t\t')}
+    on<_Submit${pascalCaseBlocName}>(_onSubmit);
+  }
+
+  ${fields.map(buildEventHandlerForField).join('\n\n\t')}
+
+  void _onSubmit(_Submit${pascalCaseBlocName} event, Emitter emit) {
+    //TODO: implement event handler
   }
 }
 `;
+}
+
+function buildEventHandlerDeclarationForField(field: FormBlocField): string {
+  return `on<_${buildEventNameForField(field, true)}>(${buildInternalBlocEventHandlerNameForField(field)});`;
+}
+
+function buildInternalBlocEventHandlerNameForField(field: FormBlocField): string {
+  return `_on${buildEventNameForField(field, true)}`;
+}
+
+function buildEventHandlerForField(field: FormBlocField): string {
+  return `void ${buildInternalBlocEventHandlerNameForField(field)}(_${buildEventNameForField(field, true)} event, Emitter emit) => emit(state.copyWith(${field.name}: event.new${changeCase.pascalCase(field.name)}));`;
 }
