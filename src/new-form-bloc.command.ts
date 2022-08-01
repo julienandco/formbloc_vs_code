@@ -14,15 +14,60 @@ import {
   getFormBlocEventTemplate,
   getFormBlocStateTemplate,
   getFormBlocTemplate,
+  getSubmissionParamsTemplate,
 } from "./templates";
-import { getBlocType, BlocType, TemplateType } from "./utils";
-import {FormBlocField} from "./form-bloc-field";
+import { BlocType } from "./utils";
+import { FormBlocField } from "./form-bloc-field";
 
 export const newFormBloc = async (uri: Uri) => {
   const blocName = await promptForFormBlocName();
   if (!blocName || blocName.trim() === "") {
     window.showErrorMessage("The bloc name must not be empty");
     return;
+  }
+
+  const numOfAttributesInput = await promptForNumberOfAttributes();
+  if (!numOfAttributesInput || numOfAttributesInput.trim() === "") {
+    window.showErrorMessage("The bloc has to have fields!");
+    return;
+  }
+  const numberOfAttributes = parseInt(numOfAttributesInput);
+  if (isNaN(numberOfAttributes)) {
+    window.showErrorMessage("Please type in a valid integer!");
+    return;
+  } else if (numberOfAttributes < 0) {
+    window.showErrorMessage("Please type in a positive integer!");
+    return;
+  }
+
+  let blocFields = [];
+  for (let i = 0; i < numberOfAttributes; i++) {
+    let name = await promptForAttributeName();
+    if (!name || name.trim() === "") {
+      window.showErrorMessage("The name of the attribute must not be empty");
+      return;
+    }
+    let stateType = await promptForAttributeStateType();
+    if (!stateType || stateType.trim() === "") {
+      window.showErrorMessage("The state type of the attribute must not be empty");
+      return;
+    }
+    let submissionType = await promptForAttributeSubmissionType();
+    if (!submissionType || submissionType.trim() === "") {
+      window.showErrorMessage("The submission type of the attribute must not be empty");
+      return;
+    }
+
+    blocFields.push(new FormBlocField(name, stateType, submissionType));
+  }
+
+  let generateSubmissionParamsInput = await promptForSubmissionParamsGeneration();
+  let generateSubmissionParams;
+  if (generateSubmissionParamsInput && (generateSubmissionParamsInput.trim() === "y" || generateSubmissionParamsInput.trim() === "yes" || generateSubmissionParamsInput.trim() === "Y" || generateSubmissionParamsInput.trim() === "Yes")) {
+    generateSubmissionParams = true;
+  }
+  else {
+    generateSubmissionParams = false;
   }
 
   let targetDirectory;
@@ -36,11 +81,14 @@ export const newFormBloc = async (uri: Uri) => {
     targetDirectory = uri.fsPath;
   }
 
-  // const blocType = await getBlocType(TemplateType.Bloc); //TODO
-  const blocType = BlocType.Freezed;
+
+  const blocType = BlocType.Freezed; //TODO: extend to other two types
   const pascalCaseBlocName = changeCase.pascalCase(blocName);
   try {
-    await generateFormBlocCode(blocName, targetDirectory, blocType);
+    await generateFormBlocCode(blocName, targetDirectory, blocType, blocFields);
+    if (generateSubmissionParams) {
+      await generateSubmissionParamsCode(blocName, targetDirectory, blocFields);
+    }
     window.showInformationMessage(
       `Successfully Generated ${pascalCaseBlocName} FormBloc`
     );
@@ -75,10 +123,51 @@ async function promptForTargetDirectory(): Promise<string | undefined> {
   });
 }
 
+function promptForNumberOfAttributes(): Thenable<string | undefined> {
+  const formBlocNamePromptOptions: InputBoxOptions = {
+    prompt: "How many attributes do you need?",
+    placeHolder: "1",
+  };
+  return window.showInputBox(formBlocNamePromptOptions);
+}
+
+function promptForAttributeName(): Thenable<string | undefined> {
+  const formBlocNamePromptOptions: InputBoxOptions = {
+    prompt: "Attribute Name",
+    placeHolder: "myAttribute",
+  };
+  return window.showInputBox(formBlocNamePromptOptions);
+}
+
+function promptForAttributeStateType(): Thenable<string | undefined> {
+  const formBlocNamePromptOptions: InputBoxOptions = {
+    prompt: "Attribute State Type (What type does this attribute have within the bloc state?):",
+    placeHolder: "String?",
+  };
+  return window.showInputBox(formBlocNamePromptOptions);
+}
+
+function promptForAttributeSubmissionType(): Thenable<string | undefined> {
+  const formBlocNamePromptOptions: InputBoxOptions = {
+    prompt: "Attribute Submission Type (What type does this attribute have when submitting?):",
+    placeHolder: "String",
+  };
+  return window.showInputBox(formBlocNamePromptOptions);
+}
+
+function promptForSubmissionParamsGeneration(): Thenable<string | undefined> {
+  const formBlocNamePromptOptions: InputBoxOptions = {
+    prompt: "Do you want to generate submission params?",
+    placeHolder: "Yes/No (y/n)",
+  };
+  return window.showInputBox(formBlocNamePromptOptions);
+}
+
 async function generateFormBlocCode(
   blocName: string,
   targetDirectory: string,
-  type: BlocType
+  type: BlocType,
+  fields: Array<FormBlocField>
 ) {
   const shouldCreateDirectory = workspace
     .getConfiguration("formbloc")
@@ -90,14 +179,27 @@ async function generateFormBlocCode(
     await createDirectory(blocDirectoryPath);
   }
 
-  //TODO
-  let testFields = [new FormBlocField("testField1", "String?", "String"), new FormBlocField("testField2", "bool", "bool"), new FormBlocField("testField3", "List<MyEnum>?", "List<MyEnum>")];
 
   await Promise.all([
-    createFormBlocEventTemplate(blocName, blocDirectoryPath, type, testFields),
-    createFormBlocStateTemplate(blocName, blocDirectoryPath, type, testFields),
-    createFormBlocTemplate(blocName, blocDirectoryPath, type, testFields),
+    createFormBlocEventTemplate(blocName, blocDirectoryPath, type, fields),
+    createFormBlocStateTemplate(blocName, blocDirectoryPath, type, fields),
+    createFormBlocTemplate(blocName, blocDirectoryPath, type, fields),
   ]);
+}
+
+async function generateSubmissionParamsCode(blocName: string, targetDirectory: string,
+
+  fields: Array<FormBlocField>) {
+  const shouldCreateDirectory = workspace
+    .getConfiguration("formbloc")
+    .get<boolean>("newFormBlocTemplate.createDirectory");
+  const blocDirectoryPath = shouldCreateDirectory
+    ? `${targetDirectory}/bloc`
+    : targetDirectory;
+  if (!existsSync(blocDirectoryPath)) {
+    await createDirectory(blocDirectoryPath);
+  }
+  await createSubmissionParamsTemplate(blocName, blocDirectoryPath, fields);
 }
 
 function createDirectory(targetDirectory: string): Promise<void> {
@@ -149,7 +251,7 @@ function createFormBlocStateTemplate(
   if (existsSync(targetPath)) {
     throw Error(`${snakeCaseBlocName}_state.dart already exists`);
   }
-  
+
   return new Promise<void>(async (resolve, reject) => {
     writeFile(
       targetPath,
@@ -179,6 +281,29 @@ function createFormBlocTemplate(
   }
   return new Promise<void>(async (resolve, reject) => {
     writeFile(targetPath, getFormBlocTemplate(blocName, type, fields), "utf8", (error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve();
+    });
+  });
+}
+
+function createSubmissionParamsTemplate(
+  blocName: string,
+  targetDirectory: string,
+  fields: Array<FormBlocField>,
+) {
+  const snakeCaseBlocName = changeCase.snakeCase(blocName);
+  const pascalCaseBlocName = changeCase.pascalCase(blocName);
+
+  const targetPath = `${targetDirectory}/submit_${snakeCaseBlocName}_params.dart`;
+  if (existsSync(targetPath)) {
+    throw Error(`submit_${snakeCaseBlocName}_params.dart already exists`);
+  }
+  return new Promise<void>(async (resolve, reject) => {
+    writeFile(targetPath, getSubmissionParamsTemplate(pascalCaseBlocName, fields), "utf8", (error) => {
       if (error) {
         reject(error);
         return;
