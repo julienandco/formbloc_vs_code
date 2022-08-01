@@ -16,7 +16,6 @@ import {
   getFormBlocTemplate,
   getSubmissionParamsTemplate,
 } from "./templates";
-import { BlocType } from "./utils";
 import { FormBlocField } from "./form-bloc-field";
 
 export const newFormBloc = async (uri: Uri) => {
@@ -81,11 +80,9 @@ export const newFormBloc = async (uri: Uri) => {
     targetDirectory = uri.fsPath;
   }
 
-
-  const blocType = BlocType.Freezed; //TODO: extend to other two types
   const pascalCaseBlocName = changeCase.pascalCase(blocName);
   try {
-    await generateFormBlocCode(blocName, targetDirectory, blocType, blocFields);
+    await generateFormBlocCode(blocName, targetDirectory, blocFields);
     if (generateSubmissionParams) {
       await generateSubmissionParamsCode(blocName, targetDirectory, blocFields);
     }
@@ -166,7 +163,6 @@ function promptForSubmissionParamsGeneration(): Thenable<string | undefined> {
 async function generateFormBlocCode(
   blocName: string,
   targetDirectory: string,
-  type: BlocType,
   fields: Array<FormBlocField>
 ) {
   const shouldCreateDirectory = workspace
@@ -181,9 +177,9 @@ async function generateFormBlocCode(
 
 
   await Promise.all([
-    createFormBlocEventTemplate(blocName, blocDirectoryPath, type, fields),
-    createFormBlocStateTemplate(blocName, blocDirectoryPath, type, fields),
-    createFormBlocTemplate(blocName, blocDirectoryPath, type, fields),
+    createFormBlocEventTemplate(blocName, blocDirectoryPath, fields),
+    createFormBlocStateTemplate(blocName, blocDirectoryPath, fields),
+    createFormBlocTemplate(blocName, blocDirectoryPath, fields),
   ]);
 }
 
@@ -216,7 +212,6 @@ function createDirectory(targetDirectory: string): Promise<void> {
 function createFormBlocEventTemplate(
   blocName: string,
   targetDirectory: string,
-  type: BlocType,
   fields: Array<FormBlocField>,
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
@@ -227,7 +222,7 @@ function createFormBlocEventTemplate(
   return new Promise<void>(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getFormBlocEventTemplate(blocName, type, fields),
+      getFormBlocEventTemplate(blocName, fields),
       "utf8",
       (error) => {
         if (error) {
@@ -243,7 +238,6 @@ function createFormBlocEventTemplate(
 function createFormBlocStateTemplate(
   blocName: string,
   targetDirectory: string,
-  type: BlocType,
   fields: Array<FormBlocField>,
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
@@ -255,7 +249,7 @@ function createFormBlocStateTemplate(
   return new Promise<void>(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getFormBlocStateTemplate(blocName, type, fields),
+      getFormBlocStateTemplate(blocName, fields),
       "utf8",
       (error) => {
         if (error) {
@@ -271,7 +265,6 @@ function createFormBlocStateTemplate(
 function createFormBlocTemplate(
   blocName: string,
   targetDirectory: string,
-  type: BlocType,
   fields: Array<FormBlocField>,
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
@@ -280,7 +273,7 @@ function createFormBlocTemplate(
     throw Error(`${snakeCaseBlocName}_bloc.dart already exists`);
   }
   return new Promise<void>(async (resolve, reject) => {
-    writeFile(targetPath, getFormBlocTemplate(blocName, type, fields), "utf8", (error) => {
+    writeFile(targetPath, getFormBlocTemplate(blocName, fields), "utf8", (error) => {
       if (error) {
         reject(error);
         return;
