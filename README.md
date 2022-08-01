@@ -4,7 +4,7 @@ A VSCode extension to generate [Blocs](https://pub.dev/packages/bloc) that handl
 
 ## Features 🚀
 
-Generates boilerplate bloc code to be used as state management of some fill-out-form within your flutter app!.
+Generates boilerplate bloc code to be used as state management of some fill-out-form within your flutter app!
 
 ## Usage 👨🏻‍💻
 
@@ -22,7 +22,7 @@ This is part of the clean code architecture I established, if you do not know wh
 
 ### Why stateType and submissionType?
 
-Say you want to receive a user input to set a value of your ```MyEnum``` enum. If you use the type ```MyEnum``` in the bloc's state, you will have to pass it some value when instantiating the bloc, thus you will need to define an initial value, or define which ones of the values you want to have there initially. If on the other hand you used ```MyEnum?``` (i.e. made it nullable) within the bloc's state, you can circumvent this intial value problem. On the other hand, if you DO want an initial value (say for instance ```MyEnum.dessert```), then you can of course just pass ```MyEnum``` as stateType, as well as submissionType.
+Say you want to receive a user input to set a value of your ```MyEnum``` enum. If you use the type ```MyEnum``` in the bloc's state, you will have to pass it some value when instantiating the bloc, thus you will need to define an initial value, or define which one of the values you want to have there initially. If on the other hand you used ```MyEnum?``` (i.e. made it nullable) within the bloc's state, you can circumvent this intial value problem. On the other hand, if you DO want an initial value (say for instance ```MyEnum.dessert```), then you can of course just pass ```MyEnum``` as stateType, as well as submissionType.
 
 ## Requirements ℹ️
 
@@ -38,9 +38,7 @@ This extension contributes the following settings:
 
 - `formbloc.newFormBlocTemplate.createDirectory`: Whether to create a directory called "bloc" and create the new form bloc inside of it.
 
-## Release Notes 🎶
-
-Users appreciate release notes as you update your extension.
+## Changelog 🪵
 
 ### 1.0.0
 
