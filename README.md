@@ -20,6 +20,7 @@ Then for each attribute:
 
 And last but not least
 - generate submission params (yes, no)
+
 This is part of the clean code architecture I established, if you do not know what this is, feel free to check it out or just respond "No" to this prompt.
 
 ### Why stateType and submissionType?
