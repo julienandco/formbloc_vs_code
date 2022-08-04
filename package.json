@@ -47,7 +47,16 @@
         "command": "formbloc.new-form-bloc",
         "title": "FormBloc: new FormBloc"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "formbloc.new-form-bloc",
+          "group": "formBlocGroup@1",
+          "when": "explorerResourceIsFolder"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
