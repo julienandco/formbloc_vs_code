@@ -45,7 +45,7 @@
     "commands": [
       {
         "command": "formbloc.new-form-bloc",
-        "title": "FormBloc: new FormBloc"
+        "title": "FormBloc: New FormBloc"
       }
     ],
     "menus": {
