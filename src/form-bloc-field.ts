@@ -9,4 +9,8 @@ export class FormBlocField {
       this.stateType = fieldStateType;
       this.submitType = fieldSubmitType;
     }
+
+    isBool(): boolean {
+      return this.submitType === 'bool' || this.submitType === 'bool?';
+    }
   }

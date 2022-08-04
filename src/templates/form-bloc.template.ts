@@ -43,5 +43,6 @@ function buildInternalBlocEventHandlerNameForField(field: FormBlocField): string
 }
 
 function buildEventHandlerForField(field: FormBlocField): string {
-  return `void ${buildInternalBlocEventHandlerNameForField(field)}(_${buildEventNameForField(field, true)} event, Emitter emit) => emit(state.copyWith(${field.name}: event.new${changeCase.pascalCase(field.name)}));`;
+  let action = field.isBool() ? `!state.${field.name}` : `event.new${changeCase.pascalCase(field.name)}`;
+  return `void ${buildInternalBlocEventHandlerNameForField(field)}(_${buildEventNameForField(field, true)} event, Emitter emit) => emit(state.copyWith(${field.name}: ${action}));`;
 }

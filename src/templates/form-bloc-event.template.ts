@@ -20,8 +20,7 @@ class ${pascalCaseBlocName} with _\$${pascalCaseBlocName} {
 
 function buildEventFactoryForField(field: FormBlocField): string {
   let pascalCaseFieldName = changeCase.pascalCase(field.name);
-  let isBool = field.submitType === 'bool';
-  if (isBool) {
+  if (field.isBool()) {
     return `${buildEventNameForField(field, false)}() = _${buildEventNameForField(field, true)}`;
   } else {
     return `${buildEventNameForField(field, false)}({${field.submitType.slice(-1) === "?" ? "" : "required"} ${field.submitType} new${pascalCaseFieldName}}) = _${buildEventNameForField(field, true)}`;
@@ -30,8 +29,7 @@ function buildEventFactoryForField(field: FormBlocField): string {
 
 export function buildEventNameForField(field: FormBlocField, capitalize: boolean): string {
   let pascalCaseFieldName = changeCase.pascalCase(field.name);
-  let isBool = field.submitType === 'bool';
-  if (isBool) {
+  if (field.isBool()) {
     return `${capitalize ? "T" : "t"}oggle${pascalCaseFieldName}`;
   } else {
     return `${capitalize ? "C" : "c"}hange${pascalCaseFieldName}`;
