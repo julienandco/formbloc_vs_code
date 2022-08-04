@@ -14,11 +14,13 @@ When run, it will prompt you for
 - the number of attributes (if your bloc manages name, email and password, you would type in "3" here)
 
 Then for each attribute:
+
 - its name (the name of the attribute in the code)
 - its stateType (the type it holds within the bloc state)
 - its submissionType (the type it holds when you send it to the backend)
 
 And last but not least
+
 - generate submission params (yes, no)
 
 This is part of the clean code architecture I established, if you do not know what this is, feel free to check it out or just respond "No" to this prompt.
