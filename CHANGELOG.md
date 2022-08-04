@@ -1,9 +1,5 @@
-# Change Log
+# Change Log 🪵
 
-All notable changes to the "formbloc" extension will be documented in this file.
+## 1.0.0
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+Initial release of formBloc. Code generation of form-handling blocs using freezed syntax.

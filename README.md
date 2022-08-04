@@ -41,10 +41,4 @@ This extension contributes the following settings:
 
 - `formbloc.newFormBlocTemplate.createDirectory`: Whether to create a directory called "bloc" and create the new form bloc inside of it.
 
-## Changelog 🪵
-
-### 1.0.0
-
-Initial release of formBloc. Code generation of form-handling blocs using freezed syntax.
-
 **Enjoy!**
