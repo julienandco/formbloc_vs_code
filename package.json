@@ -2,7 +2,7 @@
   "name": "formbloc",
   "displayName": "formbloc",
   "description": "Boilerplate code generation for blocs that handle forms.",
-  "version": "1.0.3",
+  "version": "1.0.0",
   "publisher": "JulienCaselmann",
   "bugs": {
     "email": "julien4445@t-online.de"

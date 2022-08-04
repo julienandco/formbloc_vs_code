@@ -43,10 +43,6 @@ This extension contributes the following settings:
 
 ## Changelog 🪵
 
-### 1.0.1
-
-Fixed minor bugs in code generation and some typos.
-
 ### 1.0.0
 
 Initial release of formBloc. Code generation of form-handling blocs using freezed syntax.
