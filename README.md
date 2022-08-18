@@ -27,7 +27,7 @@ This is part of the clean code architecture I established, if you do not know wh
 
 ### Why stateType and submissionType?
 
-Say you want to receive a user input to set a value of your ```MyEnum``` enum. If you use the type ```MyEnum``` in the bloc's state, you will have to pass it some value when instantiating the bloc, thus you will need to define an initial value, or define which one of the values you want to have there initially. If on the other hand you used ```MyEnum?``` (i.e. made it nullable) within the bloc's state, you can circumvent this intial value problem. So here, you would pass MyEnum? as ```stateType``` and MyEnum as ```submissionType```. On the other hand, if you DO want an initial value (say for instance ```MyEnum.dessert```), then you can of course just pass ```MyEnum``` as stateType, as well as submissionType.
+Say you want to receive a user input to set a value of your ```MyEnum``` enum. If you use the type ```MyEnum``` in the bloc's state, you will have to pass it some value when instantiating the blocstate, thus you will need to define an initial value, or define which one of the values you want to have there initially. If on the other hand you used ```MyEnum?``` (i.e. made it nullable) within the bloc's state, you can circumvent this intial value problem. So here, you would pass MyEnum? as ```stateType``` and MyEnum as ```submissionType```. On the other hand, if you DO want an initial value (say for instance ```MyEnum.dessert```), then you can of course just pass ```MyEnum``` as stateType, as well as submissionType.
 
 ## Requirements ℹ️
 
