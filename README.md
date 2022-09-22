@@ -35,7 +35,7 @@ This is not a strong requirement per se, as the extension will always work, but 
 
 ## Roadmap 🛣
 
-Additional templates with syntax that supports users of [Equatable](https://pub.dev/packages?q=equatable) or nothing (i.e. a default mode, that will always compile) will maybe be added in the future, depending on how this [issue](https://github.com/felangel/bloc/issues/3466) turns out.
+Additional templates with syntax that supports users of [Equatable](https://pub.dev/packages?q=equatable) or nothing (i.e. a default mode, that will always compile) will maybe be added in the future.
 
 ## Extension Settings ⚙️
 
