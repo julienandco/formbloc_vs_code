@@ -6,13 +6,14 @@ export function getFormBlocStateTemplate(blocName: string, fields: Array<FormBlo
 }
 
 function getFreezedFormBlocStateTemplate(blocName: string, fields: Array<FormBlocField>): string {
-  const pascalCaseBlocName = changeCase.pascalCase(blocName) + "State";
+  const pascalCaseStateName = changeCase.pascalCase(blocName) + "State";
+  const pascalCaseBlocName = changeCase.pascalCase(blocName);;
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
   return `part of '${snakeCaseBlocName}_bloc.dart';
 
 @freezed
-class ${pascalCaseBlocName} with _\$${pascalCaseBlocName} {
-  const factory ${pascalCaseBlocName}.editing(${getFreezedFactoryString(fields)}) = _${pascalCaseBlocName}Editing;
+class ${pascalCaseStateName} with _\$${pascalCaseStateName} {
+  const factory ${pascalCaseStateName}.editing(${getFreezedFactoryString(fields)}) = _${pascalCaseBlocName}Editing;
 }
 `;
 }
