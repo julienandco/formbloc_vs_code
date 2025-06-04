@@ -1,6 +1,7 @@
 # formbloc 📝
 
 A VSCode extension to generate [Blocs](https://pub.dev/packages/bloc) that handle forms. Say goodbye to all the boilerplate event factories and event handlers à la ```void _onSth(Event event, Emitter emit) => emit(state.copyWith(sth: event.sth));```, just generate it!
+Go [check it out](https://marketplace.visualstudio.com/items?itemName=JulienCaselmann.formbloc)!
 
 ## Features 🚀
 
